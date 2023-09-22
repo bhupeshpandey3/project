@@ -1,0 +1,25 @@
+steps:
+# Build Image using Paketo Buildpacks
+  - name: gcr.io/k8s-skaffold/pack
+    args:
+      - build
+      - us-central1-docker.pkg.dev/pg-cw-dev/purplecontainers/purple-server:$COMMIT_SHA
+      - '--builder'
+      - 'paketobuildpacks/builder:base'
+      - '--buildpack'
+      - paketo-buildpacks/go
+      - '--env'
+      - BP_GO_TARGETS=./purple-server
+# Push Built Image
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - us-central1-docker.pkg.dev/pg-cw-dev/purplecontainers/purple-server:$COMMIT_SHA
+
+# Deploy container image to GKE
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=./purple-server-deployment.yaml
+    - --location=us-central1
+    - --cluster=development-gke
