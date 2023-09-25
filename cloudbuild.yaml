@@ -15,5 +15,5 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - us-central1-docker.pkg.dev/pg-cw-dev/gocontainers/hello-server:$COMMIT_SHA
+      - us-central1-docker.pkg.dev/learning-environment-367711/gocontainers/hello-server:$COMMIT_SHA
 
