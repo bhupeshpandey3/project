@@ -1,4 +1,9 @@
-Steps: 
-   - name: 'gcr.io/cloud-builders/docker'
-     args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/my-image']
-   
+steps:
+- name: 'gcr.io/buildpacks/builder'
+  args:
+    - 'build'
+    - '--builder'
+    - 'paketo-buildpacks/go'
+    - '.'
+images:
+- '${_LOCATION}-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE_NAME'
