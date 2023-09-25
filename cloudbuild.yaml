@@ -5,5 +5,3 @@ steps:
     - '--builder'
     - 'paketo-buildpacks/go'
     - '.'
-images:
-- '${_LOCATION}-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE_NAME'
