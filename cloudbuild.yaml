@@ -1,7 +1,15 @@
-steps:
-- name: 'gcr.io/buildpacks/builder'
-  args:
-    - 'build'
-    - '--builder'
-    - 'paketo-buildpacks/go'
-    - '.'
+# Build Image using Paketo Buildpacks
+  - name: gcr.io/k8s-skaffold/pack
+    args:
+      - build
+      - us-central1-docker.pkg.dev/pg-cw-dev/gocontainers/hello-server:$COMMIT_SHA
+      - '--builder'
+      - 'paketobuildpacks/builder:base'
+      - '--buildpack'
+      - paketo-buildpacks/go
+# Push Built Image
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - us-central1-docker.pkg.dev/pg-cw-dev/gocontainers/hello-server:$COMMIT_SHA
+
