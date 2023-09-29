@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        env:
+            - name: WORDPRESS_DB_HOST
+              value: 127.0.0.1:3306
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sql-db-secrets
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: sql-db-secrets
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: sql-db-secrets
+                  key: database
+        ports:
+        - containerPort: 80
+
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:latest
+        command: ["/cloud_sql_proxy", "-instances=learning-environment-367711:us-central1:auth-poc=tcp:3306"]
+        securityContext:
+          runAsUser: 2
